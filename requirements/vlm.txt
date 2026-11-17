@@ -1,0 +1,9 @@
+-r base.txt
+
+transformers>=4.46
+accelerate>=1.0
+autoawq>=0.2.7
+qwen-vl-utils>=0.0.8
+sentencepiece>=0.2
+Pillow>=10.4
+numpy>=1.26

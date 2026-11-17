@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "monitoreo-urbano"
+version = "0.1.0"
+description = "Prototipo: detección, descripción y consulta retrospectiva en lenguaje natural sobre video urbano."
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 115
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["src/monitoreo_urbano"]
+
+[tool.coverage.report]
+# Meta de la cátedra para las pruebas automatizadas (observación R24): cobertura de sentencias del código de la aplicación.
+fail_under = 85
+show_missing = true

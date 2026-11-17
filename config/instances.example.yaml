@@ -1,0 +1,16 @@
+# Asignación estática de cámaras a instancias de visión. Copiar a config/instances.yaml.
+# Cada instancia es un proceso con un solo detector YOLO que atiende todas sus cámaras.
+# Si config/instances.yaml no existe, se arma una única instancia con todas las cámaras de cameras.yaml.
+#
+# Para ampliar la capacidad: agregar una instancia, asignarle cámaras y fijar su GPU en `device`.
+# Una cámara pertenece a una sola instancia.
+instances:
+  - name: vision-1
+    device: "cuda:0"          # opcional; por defecto MU_YOLO_DEVICE
+    analysis_fps: 6           # opcional; por defecto MU_ANALYSIS_FPS o los fps nativos
+    cameras: [cam-01, cam-02]
+
+  - name: vision-2
+    device: "cuda:1"
+    cameras: [cam-demo]
+    # cameras: "*"            # todas las cámaras del catálogo (sirve con una sola instancia)

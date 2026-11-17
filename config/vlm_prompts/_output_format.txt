@@ -1,0 +1,5 @@
+Devolvé la respuesta en este formato EXACTO, sin nada antes ni después, sin markdown ni negritas, en una sola línea:
+
+DESCRIPCION: <una oración corta con lo que se ve en ESTE video, según las reglas de foco>
+
+Los textos entre <> se reemplazan por lo que realmente se ve. No repitas frases de ejemplo ni uses una descripción genérica, y no agregues otros campos ni listas.

@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      # Los defaults son solo para desarrollo local. Para desplegar, scripts/generate_secrets.py
+      # escribe credenciales propias en .env y compose las toma de ahí.
+      POSTGRES_USER: ${POSTGRES_USER:-monitoreo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-monitoreo}
+      POSTGRES_DB: monitoreo_urbano
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-monitoreo}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-monitoreo123}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    environment:
+      # Por defecto sin autenticación (desarrollo). generate_secrets.py setea MTX_AUTHMETHOD=http y
+      # apunta MediaMTX a query_service, que valida la misma clave que exige la API (RNF5).
+      MTX_AUTHMETHOD: ${MTX_AUTHMETHOD:-internal}
+      MTX_AUTHHTTPADDRESS: ${MTX_AUTHHTTPADDRESS:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8554:8554"
+      - "8888:8888"
+    volumes:
+      - ./config/mediamtx.yml:/mediamtx.yml:ro
+
+volumes:
+  pgdata:
+  miniodata:

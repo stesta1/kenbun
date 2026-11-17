@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kenbun</title>
+  <link rel="icon" type="image/svg+xml" href="img/kenbun.svg">
+  <link rel="stylesheet" href="css/app.css?v=16">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+</head>
+<body class="tablero">
+  <header id="topbar" class="topbar"></header>
+
+  <main class="layout">
+    <section class="cameras" aria-label="Cámaras en vivo">
+      <div class="panel-head">
+        <h2>Cámaras</h2>
+        <span class="spacer"></span>
+        <label>Distribución
+          <select id="layout-select">
+            <option value="2">2 columnas</option>
+            <option value="3">3 columnas</option>
+            <option value="4">4 columnas</option>
+          </select>
+        </label>
+        <button id="pick-cameras" type="button">Elegir cámaras</button>
+      </div>
+      <div id="camera-grid" class="camera-grid"></div>
+    </section>
+
+    <section class="alerts" aria-label="Alertas">
+      <div class="panel-head">
+        <h2>Alertas</h2>
+        <span class="spacer"></span>
+        <button id="sound-toggle" type="button" aria-pressed="false">Sonido: apagado</button>
+        <button id="alert-clear" type="button" class="ghost">Limpiar</button>
+      </div>
+      <div id="alert-list" class="alert-list" aria-live="polite"></div>
+    </section>
+
+    <aside class="chat" aria-label="Consulta retrospectiva">
+      <div id="review-overlay" class="review-overlay" hidden></div>
+      <div class="panel-head">
+        <h2>Consulta</h2>
+        <span class="spacer"></span>
+        <button id="chat-clear" type="button" class="ghost" title="Borra la conversación y el contexto guardados en este navegador">Limpiar chat</button>
+      </div>
+      <div id="chat-log" class="chat-log"></div>
+      <form id="chat-form" class="chat-form">
+        <textarea id="chat-input" rows="2" required
+          placeholder="Preguntá en lenguaje natural, por ejemplo: ¿hubo un choque esta tarde?"></textarea>
+        <details>
+          <summary>Filtros opcionales</summary>
+          <label>Cámara
+            <select id="chat-camera"><option value="">Todas</option></select>
+          </label>
+          <label>Desde <input id="chat-start" type="datetime-local"></label>
+          <label>Hasta <input id="chat-end" type="datetime-local"></label>
+        </details>
+        <p class="hint">El chat recuerda la conversación para entender mensajes de seguimiento, por ejemplo «ese no es, el que busco tenía…». «Limpiar chat» la borra.</p>
+        <button type="submit" id="chat-send">Consultar</button>
+      </form>
+    </aside>
+  </main>
+
+  <main class="review-layout" hidden>
+    <section class="queue" aria-label="Eventos sin confirmar">
+      <div class="panel-head"><h2>Pendientes</h2><span class="spacer"></span><span id="queue-count"></span></div>
+      <ol id="queue-list" class="queue-list"></ol>
+    </section>
+
+    <section class="detail" aria-label="Clip del evento">
+      <div id="detail-empty" class="empty">Elegí un evento de la lista.</div>
+      <div id="detail" hidden>
+        <video id="review-video" controls playsinline></video>
+        <dl id="meta" class="meta"></dl>
+        <p id="no-alert-note" class="note"></p>
+      </div>
+    </section>
+
+    <section class="decision" aria-label="Decisión">
+      <div class="panel-head"><h2>Descripción generada</h2></div>
+      <div id="decision" hidden>
+        <label class="field">Categoría del evento
+          <select id="category" aria-label="Categoría del evento"></select>
+        </label>
+        <p class="hint">Si la cambiás, al confirmar el evento queda con la categoría nueva. Se conserva la original.</p>
+        <textarea id="description" rows="10" aria-label="Descripción preliminar del evento"></textarea>
+        <p class="hint">Descripción preliminar generada por el modelo, muy básica. Corregila o completala según lo que ves en el clip.</p>
+        <div id="vehicles-mount"></div>
+        <div class="decision-buttons">
+          <button id="confirm" type="button" class="primary">Confirmar evento</button>
+          <button id="dismiss" type="button" class="danger">Descartar evento</button>
+        </div>
+        <p class="hint">Confirmar guarda la descripción y los vehículos y deja el evento en el historial consultable. Descartar elimina la alerta y no se indexa.</p>
+        <p id="status-msg" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="clip-dialog" class="dialog">
+    <form method="dialog" class="dialog-head">
+      <strong id="clip-title">Clip</strong>
+      <button>Cerrar</button>
+    </form>
+    <video id="clip-video" controls playsinline></video>
+  </dialog>
+
+  <dialog id="pick-dialog" class="dialog">
+    <form method="dialog" class="dialog-head">
+      <strong>Cámaras del tablero</strong>
+      <button>Listo</button>
+    </form>
+    <p class="hint">Las cámaras tildadas se muestran en el tablero y son las únicas de las que recibís alertas. La consulta retrospectiva sigue viendo todas las que tu clave permite.</p>
+    <div id="pick-list" class="check-list"></div>
+  </dialog>
+
+  <script type="module" src="js/tablero.js?v=16"></script>
+  <script type="module" src="js/revision.js?v=16"></script>
+</body>
+</html>

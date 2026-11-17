@@ -1,0 +1,17 @@
+cameras:
+  - camera_id: cam-01
+    label: "Av. Independencia y Sarandí"
+    source: "data/raw_videos/cam-01-sample.mp4"
+    comuna: "1"
+    ubicacion: "Av. Independencia y Sarandí"  # calles de la cámara: el chat la usa para buscar por lugar
+
+  - camera_id: cam-02
+    label: "Av. Rivadavia y Boyacá"
+    source: "data/raw_videos/cam-02-sample.mp4"
+    comuna: "11"
+
+  - camera_id: cam-demo
+    label: "Video de ejemplo (bus.jpg de ultralytics, vía MediaMTX)"
+    source: "rtsp://localhost:8554/cam-demo"
+    # Corré scripts/simulate_ip_camera.py --camera-id cam-demo para publicarlo antes de usar esta cámara.
+    # Para una cámara IP real, reemplazar por su URL RTSP (ej. rtsp://usuario:pass@192.168.1.50:554/stream1).
